@@ -1,30 +1,33 @@
 import React from "react";
-import { axiosWithAuth } from "../utils/axiosWithAuth";
+import FriendsCard from "./FriendsCard";
+import AddFriendForm from "../components/AddFriendForm";
+import FriendProfile from "./FriendProfile";
 
-class FriendList extends React.Component {
-  state = {};
+const FriendList = props => {
+  const data = props.friends;
+  //   console.log("LIST:", props);
+  return (
+    <div>
+      <h1>FRIENDS LIST</h1>
+      <AddFriendForm addFriend={props.addFriend} />
 
-  componentDidMount() {
-    this.getData();
-  }
+      {props.clickedFriend.visible ? (
+        <FriendProfile clickedFriend={props.clickedFriend} />
+      ) : (
+        <p>Click 'Show Details' for more Info...</p>
+      )}
 
-  getData = () => {
-    axiosWithAuth()
-      .get("/friends")
-      .then(res => console.log(res))
-      .catch(err => console.log(err));
-  };
-
-  render() {
-    return (
-      <div>
-        <form>
-          <input />
-          <button></button>
-        </form>
-      </div>
-    );
-  }
-}
+      {data.map(friend => (
+        <FriendsCard
+          key={friend.id}
+          data={friend}
+          loadProfile={props.loadProfile}
+          clickedFriend={props.clickedFriend}
+          deleteFriend={props.deleteFriend}
+        />
+      ))}
+    </div>
+  );
+};
 
 export default FriendList;
